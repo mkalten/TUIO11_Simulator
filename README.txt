@@ -28,7 +28,7 @@ Application Start:
 This application is based on the Java programming language.
 It needs a Java Runtime Environment version 1.6 or later 
 installed on your system in order to function properly.
-See: http://java.sun.com/j2se/
+See: http://www.oracle.com/technetwork/java/javase/downloads/
 
 You can start the application by double clicking TUIOSimulator.jar.
 Alternativly you can call "java -jar TUIOSimulator.jar" from the command line.
