@@ -685,7 +685,7 @@ public class Simulation extends JPanel implements Runnable {
 
 		long currentFrameTime = System.currentTimeMillis();
 		long dt = currentFrameTime - lastFrameTime;
-		if (dt<16) return;
+		if (dt<5) return;
 
 		Point pt = evt.getPoint();
 		int x = (int)pt.getX();
