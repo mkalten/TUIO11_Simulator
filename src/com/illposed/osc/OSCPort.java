@@ -33,14 +33,6 @@ public abstract class OSCPort {
 	public static final int defaultSCLangOSCPort = 57120;
 	
 	/**
-	 * @see java.lang.Object#finalize()
-	 */
-	protected void finalize() throws Throwable {
-		super.finalize();
-		socket.close();
-	}
-	
-	/**
 	 * Close the socket and free-up resources. It's recommended that clients call
 	 * this when they are done with the port.
 	 */

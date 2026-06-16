@@ -693,9 +693,9 @@ public class Simulation extends JPanel implements Runnable {
 		
 		if (selectedObject!=null){
 			//System.out.println(evt.getModifiers());
-			switch (evt.getModifiers()) {
+			switch (evt.getModifiersEx()) {
 				// translation
-				case 17: {
+				case InputEvent.BUTTON1_DOWN_MASK | InputEvent.BUTTON3_DOWN_MASK: {
 					if (manager.collision) {
 						if(!table_border.contains(selectedObject.getPosition())) {
 							if (robot!=null) robot.mouseMove((int)getLocationOnScreen().getX()+lastX,(int)getLocationOnScreen().getY()+lastY);
@@ -712,7 +712,7 @@ public class Simulation extends JPanel implements Runnable {
 
 					break;
 				}
-				case 16: {
+				case InputEvent.BUTTON1_DOWN_MASK: {
 
 					if(manager.collision) {
 						if(!table_border.contains(evt.getPoint())) {
@@ -767,7 +767,7 @@ public class Simulation extends JPanel implements Runnable {
 					break;
 				}
 				// rotation
-				case 4: {
+				case InputEvent.BUTTON3_DOWN_MASK: {
 					if (lastY<0) break;
 					int diff = lastY-y;
 					if (diff>15) diff = 15;
@@ -782,8 +782,8 @@ public class Simulation extends JPanel implements Runnable {
 				}
 			
 				// switch sides
-				case 21: //mac
-				case 5: {
+				case InputEvent.BUTTON1_DOWN_MASK | InputEvent.BUTTON3_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK: //mac
+				case InputEvent.BUTTON1_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK: {
 					if (lastY<0) break;
 					int diff = lastY-y;
 					if (diff>=3) switchSide(selectedObject,-1);
@@ -861,7 +861,7 @@ public class Simulation extends JPanel implements Runnable {
 						if (manager.verbose) System.out.println("add cur "+session_id);
 						selectedCursor = manager.addCursor(session_id,x,y);
 						cursorMessage();
-						if ((evt.getModifiers() & InputEvent.SHIFT_MASK) > 0) stickyCursors.addElement(selectedCursor.session_id);
+						if ((evt.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) > 0) stickyCursors.addElement(selectedCursor.session_id);
 					}
 				}
 			}
@@ -873,7 +873,7 @@ public class Simulation extends JPanel implements Runnable {
 
 	public void mouse_moved(MouseEvent evt) {
 
-		if (evt.getModifiers()==2) {
+		if (evt.getModifiersEx() == InputEvent.CTRL_DOWN_MASK) {
 
 			int x = evt.getX();
 			int y = evt.getY();
@@ -933,7 +933,7 @@ public class Simulation extends JPanel implements Runnable {
 
 				int selCur = -1;
 				if (selectedCursor!=null) selCur = selectedCursor.session_id;
-				if (((evt.getModifiers() & InputEvent.SHIFT_MASK) > 0) && selCur != cursor.session_id) {
+				if (((evt.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) > 0) && selCur != cursor.session_id) {
 					if (manager.verbose) System.out.println("del cur "+cursor.session_id);
 					stickyCursors.removeElement(cursor.session_id);
 					if (jointCursors.contains(cursor.session_id)) jointCursors.removeElement(cursor.session_id);
@@ -942,7 +942,7 @@ public class Simulation extends JPanel implements Runnable {
 					selectedCursor = null;
 					repaint();
 					return;
-				} else if ((evt.getModifiers() & InputEvent.CTRL_MASK) > 0) {
+				} else if ((evt.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) > 0) {
 					if (jointCursors.contains(cursor.session_id)) jointCursors.removeElement(cursor.session_id);
 					else jointCursors.addElement(cursor.session_id);
 					repaint();
@@ -958,7 +958,7 @@ public class Simulation extends JPanel implements Runnable {
 			}
 		}
 			
-		if ((evt.getModifiers() & InputEvent.CTRL_MASK) > 0) return;
+		if ((evt.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) > 0) return;
 		
 		if (table.contains(new Point(x, y))) {
 			
@@ -966,7 +966,7 @@ public class Simulation extends JPanel implements Runnable {
 			if (manager.verbose) System.out.println("add cur "+session_id);
 			selectedCursor = manager.addCursor(session_id,x,y);
 			cursorMessage();
-			if ((evt.getModifiers() & InputEvent.SHIFT_MASK) > 0) stickyCursors.addElement(selectedCursor.session_id);
+			if ((evt.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) > 0) stickyCursors.addElement(selectedCursor.session_id);
 			repaint();
 			return;
 		}

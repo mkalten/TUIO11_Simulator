@@ -75,19 +75,19 @@ public class TuioSimulator {
 		JMenuBar menubar = new JMenuBar();
 		JMenu optionMenu = new JMenu("Options");
 		final JMenuItem resetItem = new JMenuItem("Reset");
-		resetItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R,Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+		resetItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R,Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
 		final JCheckBoxMenuItem verboseItem = new JCheckBoxMenuItem("Verbose");
-		verboseItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V,Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+		verboseItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V,Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
 		final JCheckBoxMenuItem collisionItem = new JCheckBoxMenuItem("Collision Detection",false);
-		collisionItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C,Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+		collisionItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C,Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
 		final JCheckBoxMenuItem updateItem = new JCheckBoxMenuItem("Periodic Messages",false);
-		updateItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P,Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+		updateItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P,Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
 		final JCheckBoxMenuItem antialiasItem = new JCheckBoxMenuItem("Antialiasing",true);
-		antialiasItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A,Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+		antialiasItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A,Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
 		final JCheckBoxMenuItem limitItem = new JCheckBoxMenuItem("Limit to Inner Circle");
-		limitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L,Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+		limitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L,Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
 		final JMenuItem quitItem  = new JMenuItem("Quit");
-		quitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q,Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+		quitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q,Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
 
 		resetItem.addActionListener( new ActionListener() { 
 			public void actionPerformed(ActionEvent evt) {
@@ -148,21 +148,21 @@ public class TuioSimulator {
 		
 		JMenu invertMenu = new JMenu("Invert");
 		final JCheckBoxMenuItem xaxisItem = new JCheckBoxMenuItem("X-axis");
-		xaxisItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X,Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+		xaxisItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X,Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
 		xaxisItem.addActionListener( new ActionListener() { public void actionPerformed(ActionEvent evt) {
 			manager.invertx = xaxisItem.getState();
 		} } );
 		invertMenu.add(xaxisItem);		
 
 		final JCheckBoxMenuItem yaxisItem = new JCheckBoxMenuItem("Y-axis");
-		yaxisItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y,Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+		yaxisItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y,Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
 		yaxisItem.addActionListener( new ActionListener() { public void actionPerformed(ActionEvent evt) {
 			manager.inverty = yaxisItem.getState();
 		} } );
 		invertMenu.add(yaxisItem);		
 
 		final JCheckBoxMenuItem angleItem = new JCheckBoxMenuItem("Angle");
-		angleItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W,Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+		angleItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W,Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
 		angleItem.addActionListener( new ActionListener() { public void actionPerformed(ActionEvent evt) {
 			manager.inverta = angleItem.getState();
 		} } );
@@ -171,7 +171,7 @@ public class TuioSimulator {
 		
 		JMenu helpMenu = new JMenu("Help");
 		JMenuItem manualItem = new JMenuItem("User Manual");
-		manualItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_M,Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+		manualItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_M,Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
 		final HelpBrowser helpBrowser = new HelpBrowser();
 		manualItem.addActionListener( new ActionListener() { public void actionPerformed(ActionEvent evt) {
 			helpBrowser.reset();

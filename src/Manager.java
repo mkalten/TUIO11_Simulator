@@ -106,7 +106,7 @@ public class Manager {
 				Node objectNode = objectNodes.item(i);
 				String typeName = ((Element)objectNode).getAttribute("class");
 				String fiducialList = ((Element)objectNode).getAttribute("fiducials");
-				boolean active = new Boolean(((Element)objectNode).getAttribute("active")).booleanValue();
+				boolean active = Boolean.parseBoolean(((Element)objectNode).getAttribute("active"));
 				float xpos = Float.parseFloat(((Element)objectNode).getAttribute("xpos"));
 				float ypos = Float.parseFloat(((Element)objectNode).getAttribute("ypos"));
 				float angle = Float.parseFloat(((Element)objectNode).getAttribute("angle"))/360*doublePi+(float)Math.PI;
