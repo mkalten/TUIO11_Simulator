@@ -1,8 +1,8 @@
 /*
 	TUIO 1.1 Simulator - Manager.java
 	http://www.tuio.org/
- 
-	Copyright (c) 2005-2016 Martin Kaltenbrunner <martin@tuio.org>
+
+	Copyright (c) 2005-2026 Martin Kaltenbrunner <martin@tuio.org>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -22,16 +22,15 @@
 import java.awt.*;
 import java.util.*;
 import java.io.*;
-import javax.swing.*;
 
 import java.io.File;
 import org.w3c.dom.Document;
 import org.w3c.dom.*;
 
+import javax.swing.JFrame;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException; 
+import TUIO.TuioTime;
 
 public class Manager {
 
@@ -40,25 +39,16 @@ public class Manager {
 	private String config_file = resources+"config.xml";
 
 	private final float doublePi = (float)(Math.PI*2);
-	private final float halfPi = (float)(Math.PI/2);
-	private final float negPi = (float)(Math.PI*-1);
-	private final float posPi = (float)(Math.PI);
 
-	public boolean verbose = false;
 	public boolean antialiasing = true;
-	public boolean collision = false;
-	
-	public boolean invertx = false;
-	public boolean inverty = false;
-	public boolean inverta = false;
-	
-	public Hashtable<Integer,Tangible> objectList = new Hashtable<Integer,Tangible>();
-	public Hashtable<Integer,Finger> cursorList = new Hashtable<Integer,Finger>();
-	public Hashtable<String,TangibleType> objectType = new Hashtable<String,TangibleType>();	
+	public boolean collision = true;
+
+	public LinkedHashMap<Integer,Tangible> objectList = new LinkedHashMap<Integer,Tangible>();
+	public Hashtable<String,TangibleType> objectType = new Hashtable<String,TangibleType>();
 	private JFrame parent;
-	
+
 	public Manager(JFrame parent, String config) {
-	
+
 		this.parent = parent;
 		if(config!=null) config_file=config;
 		reset();
@@ -70,7 +60,7 @@ public class Manager {
 			DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
 			doc = docBuilder.parse (new File(config_file));
-			
+
 			String docType = doc.getDocumentElement().getNodeName();
 			if (!docType.equalsIgnoreCase("tuio")) {
 				System.out.println("error parsing configuration file");
@@ -90,7 +80,7 @@ public class Manager {
 				String shape = ((Element)classNode).getAttribute("shape");
 				String color = ((Element)classNode).getAttribute("color");
 				String description = ((Element)classNode).getAttribute("description");
-				
+
 				TangibleType type = new TangibleType(name,shape,color,description);
 				objectType.put(type.name,type);
 
@@ -98,7 +88,7 @@ public class Manager {
 				System.out.println("error parsing class node");
 			}
 		}
-		
+
 		int session_id = -1;
 		NodeList objectNodes = doc.getElementsByTagName("object");
 		for (int i=0;i<objectNodes.getLength();i++) {
@@ -111,15 +101,14 @@ public class Manager {
 				float ypos = Float.parseFloat(((Element)objectNode).getAttribute("ypos"));
 				float angle = Float.parseFloat(((Element)objectNode).getAttribute("angle"))/360*doublePi+(float)Math.PI;
 
-
 				TangibleType type = (TangibleType)(objectType.get(typeName));
   				StringTokenizer st = new StringTokenizer(fiducialList,",");
-  				
+
   				int sides = st.countTokens();
 				Tangible tangible[] = new Tangible[sides];
 				int fiducial_id = Integer.parseInt(st.nextToken());
 				tangible[0] = new Tangible(session_id,fiducial_id, type, active, xpos, ypos, angle);
-				objectList.put(session_id,tangible[0]); 
+				objectList.put(session_id,tangible[0]);
 				session_id--;
 				if (sides>1){
 					for (int face=1;face<sides;face++) {
@@ -131,7 +120,7 @@ public class Manager {
 					for (int face=0;face<sides;face++) {
 						if (face>0) tangible[face].previous = tangible[face-1];
 						else tangible[face].previous = tangible[sides-1];
-						
+
 						if (face<sides-1) tangible[face].next = tangible[face+1];
 						else tangible[face].next = tangible[0];
 					}
@@ -141,77 +130,34 @@ public class Manager {
 				e.printStackTrace();
 			}
 		}
-		
-									
 	}
-	
+
 	public final void reset() {
-		cursorList.clear();
 		objectList.clear();
+		objectType.clear();
 		readConfig();
-		parent.repaint();	
+		parent.repaint();
 	}
 
 	public final void activateObject(int old_id, int session_id) {
-	
+
 		Tangible tangible = objectList.get(old_id);
-		if(!tangible.isActive()) {
-			if (verbose) System.out.println("add obj "+session_id+" "+tangible.fiducial_id);
-
-			tangible.activate(session_id);
-			objectList.remove(old_id);
-			objectList.put(session_id,tangible);
-
-			parent.repaint();
-		}
+		if (tangible==null) return;
+		tangible.activate();
+		objectList.remove(old_id);
+		objectList.put(session_id,tangible);
+		parent.repaint();
 	}
 
 	public final void deactivateObject(Tangible tangible) {
 
-		if(tangible.isActive()) {
-			if (verbose) System.out.println("del obj "+tangible.session_id+" "+tangible.fiducial_id);
- 			tangible.deactivate();
-			parent.repaint();
-		}
-	}
-
-	public final void updateObject(Tangible tangible, int x, int y, float a) {
-	
-		Point pt =  tangible.getPosition();
-		float dx = x-pt.x;
-		float dy = y-pt.y;
-		float dt = a - tangible.getAngle();
-
-		if (dt < negPi) dt += doublePi;
-		if (dt > posPi) dt -= doublePi;
-		
-		if ((dx!=0) || (dy!=0)) tangible.translate(dx,dy);
-		if (dt!=0) tangible.rotate(dt);
-		parent.repaint();
-	}
-	
-	public final Finger addCursor(int s_id, int x, int y) {
-		
-		Finger cursor = new Finger(s_id,x,y);
-		cursorList.put(s_id, cursor);
-		parent.repaint();
-		return cursor;
-	}
-
-	public final void updateCursor(Finger cursor, int x, int y) {
-
-		cursor.update(x,y);
+		tangible.deactivate();
 		parent.repaint();
 	}
 
-	public final Finger getCursor(int s_id) {
-		return cursorList.get(s_id);
-	}
-	
-	public final void terminateCursor(Finger cursor) {
-		cursorList.remove(cursor.session_id);
+	public final void updateObject(Tangible tangible, int x, int y, float a, TuioTime ttime) {
+
+		tangible.moveTo(ttime,x,y,a);
 		parent.repaint();
 	}
- 
-
 }

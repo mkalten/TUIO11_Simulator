@@ -2,7 +2,7 @@
 	TUIO 1.1 Simulator - TangibleType.java
 	http://www.tuio.org/
  
-	Copyright (c) 2005-2016 Martin Kaltenbrunner <martin@tuio.org>
+	Copyright (c) 2005-2026 Martin Kaltenbrunner <martin@tuio.org>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

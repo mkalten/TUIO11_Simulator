@@ -2,7 +2,7 @@
 	TUIO 1.1 Simulator - HelpBrowser.java
 	http://www.tuio.org/
  
-	Copyright (c) 2005-2016 Martin Kaltenbrunner <martin@tuio.org>
+	Copyright (c) 2005-2026 Martin Kaltenbrunner <martin@tuio.org>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -29,10 +29,15 @@ public class HelpBrowser extends JFrame implements HyperlinkListener {
 
 	private JScrollPane scrollPane;
 	private JEditorPane helpPane;
-	private String helpIndex = "file:resources/index.html";
+	private URL helpIndex = getClass().getResource("/index.html");
 
 	public HelpBrowser() {
-		
+
+		if (helpIndex==null) {
+			try { helpIndex = new URL("file:resources/index.html"); }
+			catch (Exception e) { }
+		}
+
 		try { helpPane = new JEditorPane(helpIndex); }
 		catch (Exception e) { helpPane = new JEditorPane("text/html","<h1>error loading documentation ...</h1>"); }
 		

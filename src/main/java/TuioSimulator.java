@@ -2,7 +2,7 @@
     TUIO 1.1 Simulator - TuioSimulator.java
     http://www.tuio.org/
 
-    Copyright (c) 2005-2016 Martin Kaltenbrunner <martin@tuio.org>
+    Copyright (c) 2005-2026 Martin Kaltenbrunner <martin@tuio.org>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -27,6 +27,10 @@ public class TuioSimulator {
 	
 	public static int width = 800;
 	public static int height = 600;
+	public static final int table_width = (int)(width/1.25);
+	public static final int table_height = (int)(height/1.25);
+	public static final int border_width = (int)(width-table_width)/2;
+	public static final int border_height = (int)(height-table_height)/2;
 	
 	public static void main(String[] argv) {
 	
@@ -75,19 +79,19 @@ public class TuioSimulator {
 		JMenuBar menubar = new JMenuBar();
 		JMenu optionMenu = new JMenu("Options");
 		final JMenuItem resetItem = new JMenuItem("Reset");
-		resetItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R,Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
+		resetItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R,Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 		final JCheckBoxMenuItem verboseItem = new JCheckBoxMenuItem("Verbose");
-		verboseItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V,Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
-		final JCheckBoxMenuItem collisionItem = new JCheckBoxMenuItem("Collision Detection",false);
-		collisionItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C,Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
+		verboseItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V,Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+		final JCheckBoxMenuItem collisionItem = new JCheckBoxMenuItem("Collision Detection",true);
+		collisionItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C,Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 		final JCheckBoxMenuItem updateItem = new JCheckBoxMenuItem("Periodic Messages",false);
-		updateItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P,Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
+		updateItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P,Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 		final JCheckBoxMenuItem antialiasItem = new JCheckBoxMenuItem("Antialiasing",true);
-		antialiasItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A,Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
+		antialiasItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A,Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 		final JCheckBoxMenuItem limitItem = new JCheckBoxMenuItem("Limit to Inner Circle");
-		limitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L,Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
+		limitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L,Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 		final JMenuItem quitItem  = new JMenuItem("Quit");
-		quitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q,Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
+		quitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q,Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 
 		resetItem.addActionListener( new ActionListener() { 
 			public void actionPerformed(ActionEvent evt) {
@@ -98,7 +102,7 @@ public class TuioSimulator {
 
 		verboseItem.addActionListener( new ActionListener() { 
 			public void actionPerformed(ActionEvent evt) {
-				manager.verbose=verboseItem.getState();
+				simulation.setVerbose(verboseItem.getState());
 			} 
 		} );
 
@@ -148,30 +152,30 @@ public class TuioSimulator {
 		
 		JMenu invertMenu = new JMenu("Invert");
 		final JCheckBoxMenuItem xaxisItem = new JCheckBoxMenuItem("X-axis");
-		xaxisItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X,Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
+		xaxisItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X,Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 		xaxisItem.addActionListener( new ActionListener() { public void actionPerformed(ActionEvent evt) {
-			manager.invertx = xaxisItem.getState();
+			simulation.setInvertXpos(xaxisItem.getState());
 		} } );
 		invertMenu.add(xaxisItem);		
 
 		final JCheckBoxMenuItem yaxisItem = new JCheckBoxMenuItem("Y-axis");
-		yaxisItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y,Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
+		yaxisItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y,Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 		yaxisItem.addActionListener( new ActionListener() { public void actionPerformed(ActionEvent evt) {
-			manager.inverty = yaxisItem.getState();
+			simulation.setInvertYpos(yaxisItem.getState());
 		} } );
 		invertMenu.add(yaxisItem);		
 
 		final JCheckBoxMenuItem angleItem = new JCheckBoxMenuItem("Angle");
-		angleItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W,Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
+		angleItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W,Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 		angleItem.addActionListener( new ActionListener() { public void actionPerformed(ActionEvent evt) {
-			manager.inverta = angleItem.getState();
+			simulation.setInvertAngle(angleItem.getState());
 		} } );
 		invertMenu.add(angleItem);		
 		
 		
 		JMenu helpMenu = new JMenu("Help");
 		JMenuItem manualItem = new JMenuItem("User Manual");
-		manualItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_M,Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
+		manualItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_M,Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 		final HelpBrowser helpBrowser = new HelpBrowser();
 		manualItem.addActionListener( new ActionListener() { public void actionPerformed(ActionEvent evt) {
 			helpBrowser.reset();
@@ -217,7 +221,7 @@ class AboutDialog extends JDialog {
 		headlineLabel.setFont(new Font("Dialog", Font.BOLD, 18));
 		getContentPane().add(headlineLabel);
 		
-		Label copyrightLabel = new Label("(c) 2005-2016 Martin Kaltenbrunner",Label.CENTER);
+		Label copyrightLabel = new Label("(c) 2005-2026 Martin Kaltenbrunner",Label.CENTER);
 		copyrightLabel.setBounds(5,40,280,15);
 		copyrightLabel.setBackground(Color.white);
 		getContentPane().add(copyrightLabel);

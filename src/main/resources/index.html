@@ -16,11 +16,16 @@ A:link { color:red; }
 <li>simple mouse-dragging moves the selected object ON the table
 <li>right mouse-dragging rotates the selected object ON the table
 <p>
-<li>SHIFT mouse-dragging moves the selected object OVER the table surface
+<li>mouse-dragging with both buttons moves the selected object OVER the table surface
 <li>moving the object out of the (round) table area, deactivates it
 <li>active objects have a black rotation mark, inactive objects are grayed out
+<li>objects cannot be moved outside the window bounds
 <p>
-<li>SHIFT right-mouse-dragging changes the face of an object with multiple faces 
+<li>dragged objects push other objects out of their way
+<li>pushed objects keep sliding briefly and settle due to friction
+<li>collision detection is enabled by default and can be toggled in the Options menu
+<p>
+<li>SHIFT mouse-dragging changes the face of an object with multiple faces 
 <p>
 <li>moving the mouse over an object holding the CTRL-key displays the object's type 
 </ul>
@@ -29,6 +34,7 @@ A:link { color:red; }
 
 <ul>
 <li>simple mouse-dragging on the table creates cursor events
+<li>dragging a cursor into an object pushes the object along
 <li>press SHIFT while dragging to create a sticky cursor
 <li>continue to manipulate any sticky cursor by moving its gray area
 <li>remove sticky cursors by SHIFT clicking in its gray area
