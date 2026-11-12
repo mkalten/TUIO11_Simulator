@@ -424,8 +424,12 @@ public class Simulation extends JPanel {
 	}
 
 	public void quit() {
-		reset();
+
+		// emit a final frame that removes all objects and cursors
 		timer.stop();
+		tuioServer.resetTuioObjects();
+		tuioServer.resetTuioCursors();
+		tuioServer.commitFrame();
 		tuioServer.close();
 	}
 

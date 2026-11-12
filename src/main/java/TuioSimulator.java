@@ -71,7 +71,7 @@ public class TuioSimulator {
 
 		app.addWindowListener( new WindowAdapter() { 
 			public void windowClosing(WindowEvent evt) {	
-				simulation.reset();
+				simulation.quit();
 				System.exit(0);
 			} 
 		});
